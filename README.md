@@ -14,15 +14,13 @@ Connected to:
 Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
 Version 21.3.0.0.0
 
-SQL> show user\
-USER is "SYS"
-SP2-0158: unknown SHOW option "\"
 SQL> SELECT instance_name FROM v$instance;
+##INSTANCE_NAME
 
 INSTANCE_NAME
 ----------------
 xe
-
+## showing available pdbs
 SQL> show pdbs;
 
     CON_ID CON_NAME                       OPEN MODE  RESTRICTED
@@ -53,27 +51,7 @@ FILE_NAME
 --------------------------------------------------------------------------------
          3 USERS
 C:\APP\USER\PRODUCT\21C\ORADATA\XE\XEPDB1\USERS01.DBF
-
-
-SQL> CREATE PLUGGABLE DATABASE XEPDB1
-  2  ADMIN USER PDADMIN IDENTFIED BY ADMIN
-  3  FILE_NAME_CONVERT=('C:\APP\USER\PRODUCT\21C\ORADATA\XE\PDBSEED','C:\APP\USER\PRODUCT\21C\ORADATA\XE\PLSQL_CLASS2024');
-ADMIN USER PDADMIN IDENTFIED BY ADMIN
-                   *
-ERROR at line 2:
-ORA-02000: missing IDENTIFIED keyword
-
-
-SQL> CREATE PLUGGABLE DATABASE XEPDB1
-  2
-SQL> CREATE PLUGGABLE DATABASE PLSQL_CLASS2024DB
-  2  ADMIN USER PDADMIN IDENTIFIED ADMIN
-  3  FILE_NAME_CONVERT=('C:\APP\USER\PRODUCT\21C\ORADATA\XE\PDBSEED',C:\APP\USER\PRODUCT\21C\ORADATA\XE\PLSQL_CLASS2024');
-ADMIN USER PDADMIN IDENTIFIED ADMIN
-                              *
-ERROR at line 2:
-ORA-02000: missing BY keyword
-
+## creating pluggable database
 
 SQL> CREATE PLUGGABLE DATABASE PLSQL_CLASS2024DB
   2  admin user pdbadmin identified by admin
@@ -84,9 +62,7 @@ Pluggable database created.
 SQL> alter session set container=PLSQL_CLASS2024DB;
 
 Session altered.
-
-SQL> create user ni_plsqlauca
-  2
+## opening pdb
 SQL> alter pluggable database PLSQL_CLASS2024DB open;
 
 Pluggable database altered.
@@ -94,7 +70,7 @@ Pluggable database altered.
 SQL> alter pluggable database PLSQL_CLASS2024DB save state;
 
 Pluggable database altered.
-
+## creating user ni_plsqlauca
 SQL> create user ni_plsqlauca identified by nice23;
 
 User created.
@@ -111,7 +87,7 @@ SQL> show pdbs;
 SQL> alter session set container=cdb$root;
 
 Session altered.
-
+## creating user  ni_to_delete_pdb
 SQL> CREATE PLUGGABLE DATABASE ni_to_delete_pdb
   2  from PLSQL_CLASS2024DB
   3  file_name_convert=('C:\APP\USER\PRODUCT\21C\ORADATA\XE\PLSQL_CLASS2024DB\','C:\APP\USER\PRODUCT\21C\ORADATA\XE\ni_to_delete_pdb\');
@@ -129,7 +105,7 @@ SQL> show pdbs;
 SQL> alter session set container=ni_to_delete_pdb;
 
 Session altered.
-
+## opening  ni_to_delete_pdb
 SQL> alter pluggable database ni_to_delete_pdb open;
 
 Pluggable database altered.
@@ -147,12 +123,6 @@ SQL> alter pluggable database NI_TO_DELETE_PDB close immediate;
 
 Pluggable database altered.
 
-SQL> alter pluggable database NI_TO_DELETE_PDB unplug into 'C:\app\user\product\21c\admin\XE\dpdump\ni_to_delete_pdb.xml';
-alter pluggable database NI_TO_DELETE_PDB unplug into 'C:\app\user\product\21c\admin\XE\dpdump\ni_to_delete_pdb.xml'
-*
-ERROR at line 1:
-ORA-65040: operation not allowed from within a pluggable database
-
 
 SQL> alter session set container=cdb$root;
 
@@ -161,7 +131,7 @@ Session altered.
 SQL> alter pluggable database NI_TO_DELETE_PDB unplug into 'C:\app\user\product\21c\admin\XE\dpdump\ni_to_delete_pdb.xml';
 
 Pluggable database altered.
-
+## deleting ni_to_delete_pdb
 SQL> drop pluggable database ni_to_delete_pdb;
 
 Pluggable database dropped.
